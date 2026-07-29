@@ -29,7 +29,7 @@ set(GLSLC_PATH )
 
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/simple_shader.vert.spv"
-    COMMAND $ENV{VK_SKD_PATH}/bin/glslc "shaders/simple_shader.vert.glsl" -o "${CMAKE_CURRENT_BINARY_DIR}/simple_shader.vert.spv"
+    COMMAND $ENV{VK_SDK_PATH}/bin/glslc "shaders/simple_shader.vert.glsl" -o "${CMAKE_CURRENT_BINARY_DIR}/simple_shader.vert.spv"
     DEPENDS "shaders/simple_shader.vert.glsl"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Buiding simple vert shader"
@@ -37,7 +37,7 @@ add_custom_command(
 
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/simple_shader.frag.spv"
-    COMMAND $ENV{VK_SKD_PATH}/bin/glslc "shaders/simple_shader.frag.glsl" -o "${CMAKE_CURRENT_BINARY_DIR}/simple_shader.frag.spv"
+    COMMAND $ENV{VK_SDK_PATH}/bin/glslc "shaders/simple_shader.frag.glsl" -o "${CMAKE_CURRENT_BINARY_DIR}/simple_shader.frag.spv"
     DEPENDS "shaders/simple_shader.frag.glsl"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Buiding simple frag shader"
@@ -45,7 +45,7 @@ add_custom_command(
 
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/histogram.comp.spv"
-    COMMAND $ENV{VK_SKD_PATH}/bin/glslc "shaders/histogram.comp.glsl" -o "${CMAKE_CURRENT_BINARY_DIR}/histogram.comp.spv"
+    COMMAND $ENV{VK_SDK_PATH}/bin/glslc "shaders/histogram.comp.glsl" -o "${CMAKE_CURRENT_BINARY_DIR}/histogram.comp.spv"
     DEPENDS "shaders/histogram.comp.glsl"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Buiding histogram shader"

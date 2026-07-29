@@ -13,8 +13,9 @@ typedef glm::vec3 Vector3;
 
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
+#ifndef _MSC_VER
 typedef unsigned int DWORD;
-
+#endif
 enum LumpIds {
     ENTITIES = 0x0000,
     BRUSH_PLANES = 0x0001,

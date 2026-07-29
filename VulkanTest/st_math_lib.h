@@ -57,13 +57,35 @@ inline bool boundingBoxCollides(__m128 point, __m128i box) {
 	return true;
 }
 
-inline __m128 loadVector3(Vector3* vec) {
+inline bool cpu_supports_avx() {
+#ifdef _MSC_VER
+	int info[4];
+	__cpuid(info, 1);
+	bool avx_cpu = (info[2] & (1 << 28)) != 0;
+	bool osxsave = (info[2] & (1 << 27)) != 0;
+	if (!avx_cpu || !osxsave) return false;
+
+	uint64_t xcr0 = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
+	return (xcr0 & 0x6) == 0x6;
+#else 
 	if (__builtin_cpu_supports("avx"))
 	{
-		return _mm_maskload_ps(&vec->x,_mm_set_epi32(0,~0,~0,~0));
-	}else
-	{
-		return _mm_set_ps(0,vec->z,vec->y,vec->x);
+		return true;
 	}
+	return false;
+#endif
+}
+
+
+inline __m128 loadVector3(Vector3* vec) {
+	if (cpu_supports_avx())
+	{
+		return _mm_maskload_ps(&vec->x,_mm_set_epi32(0,~0,~0,~0));
+	}
+	else
+	{
+		return _mm_set_ps(0, vec->z, vec->y, vec->x);
+	}
+}
 
 }
