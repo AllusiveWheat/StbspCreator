@@ -124,7 +124,7 @@ namespace st {
 
 		file.open(fileName, std::ios::binary);
 		if (!file.good()) {
-			printf("missing model %s\n", name.c_str());
+			printf("missing model %s, fileName: %s\n", name.c_str(), fileName.string().c_str());
 			return;
 		}
 		file.seekg(0, std::ios::beg);
