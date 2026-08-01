@@ -88,4 +88,3 @@ inline __m128 loadVector3(Vector3* vec) {
 	}
 }
 
-}

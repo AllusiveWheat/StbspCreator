@@ -17,6 +17,7 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 
+#include "st_stbsp_exporter.h"
 
 
 namespace st {
@@ -232,38 +233,50 @@ namespace st {
 		}
 		vkDeviceWaitIdle(stDevice.device());
 		if (shouldClose)return;
+
+		int xMin = std::numeric_limits<int>::max();
+		int yMin = std::numeric_limits<int>::max();
+		int xMax = std::numeric_limits<int>::min();
+		int yMax = std::numeric_limits<int>::min();
 		for (auto& cell:cells)
 		{
-			if (cell.xIndex == 0 && cell.yIndex == 0)
+			xMin = std::min(xMin,cell.xIndex);
+			yMin = std::min(yMin,cell.yIndex);
+			xMax = std::max(xMax,cell.xIndex);
+			yMax = std::max(yMax,cell.yIndex);
+		}
+		StbspExporter exporter;
+		exporter.SetCellGrid(xMin,yMin,xMax,yMax);
+		for (int i = 0;i<StMaterialManager::getManager().getMaterialCount();i++)
+		{
+			exporter.AddRpakMaterial(StMaterialManager::getManager().getMaterialName(i));
+		}
+		for (int x = xMin; x < xMax+4; x+=4-x%4)
+		{
+			int xlimit = std::min(x+4,xMax);
+			for (int y = yMin; y < yMax+4; y+=4-y%4)
 			{
-				struct PageData
-				{
-					std::string name;
-					int bin;
-					int cvg;
-				};
-				std::vector<PageData> pageData;
-				for (int i = 0;i < cell.histogramData.size();i++)
-				{
-					PageData page;
-					page.name = StMaterialManager::getManager().getMaterialName(i/16);
-					page.bin = i%16;
-					page.cvg = cell.histogramData[i];
-					pageData.push_back(page);
-				}
-				std::sort(pageData.begin(),pageData.end(),[](const PageData& a,const PageData& b)
-				{
-					return a.cvg>b.cvg;
-				});
-				for (auto& page:pageData)
-				{
-					if (!strncmp(page.name.c_str(),"TOOLS",5))continue;
-					if (!strncmp(page.name.c_str(),"WORLD\\DEV",9))continue;
-					printf("%-110s %2d %d\n",page.name.c_str(),page.bin,page.cvg);
-				}
+				int ylimit = std::min(y+4,yMax);
+				std::vector<std::vector<uint32_t>> histograms;
 
+				for (auto& cell:cells)
+				{
+					if (cell.xIndex<x)
+						continue;
+					if (cell.yIndex<y)
+						continue;
+					if (cell.xIndex>=xlimit)
+						continue;
+					if (cell.yIndex>=ylimit)
+						continue;
+					histograms.push_back(cell.histogramData);
+				}
+				exporter.AddResidentPage(x,y,xlimit,ylimit,histograms);
 			}
 		}
+		exporter.FinishFile("out.stbsp");
+
+
 	}
 
 	

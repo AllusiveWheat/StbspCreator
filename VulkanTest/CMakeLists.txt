@@ -16,7 +16,25 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-add_executable (rStream "VulkanTest.cpp" "VulkanTest.h" "st_window.cpp" "st_app.cpp" "st_pipeline.cpp" "st_device.cpp" "st_swap_chain.cpp" "st_model.cpp" "st_renderer.cpp" "simple_render_system.cpp" "st_camera.cpp" "keyboard_movement_controller.cpp" "st_bsp_loader.cpp" "st_game_object.cpp" "st_mdl_loader.cpp" "st_buffer.cpp" "st_descriptors.cpp")
+add_executable (rStream
+    "VulkanTest.cpp"
+    "st_window.cpp"
+    "st_app.cpp"
+    "st_pipeline.cpp"
+    "st_device.cpp"
+    "st_swap_chain.cpp"
+    "st_model.cpp"
+    "st_renderer.cpp"
+    "simple_render_system.cpp"
+    "st_camera.cpp"
+    "keyboard_movement_controller.cpp"
+    "st_bsp_loader.cpp"
+    "st_game_object.cpp"
+    "st_mdl_loader.cpp"
+    "st_buffer.cpp"
+    "st_descriptors.cpp"
+    "st_stbsp_exporter.cpp"
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET rStream PROPERTY CXX_STANDARD 20)
